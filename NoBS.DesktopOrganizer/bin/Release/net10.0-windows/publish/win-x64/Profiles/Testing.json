@@ -1,0 +1,40 @@
+{
+  "Name": "Testing",
+  "AccentColor": "#6B5BFF",
+  "Windows": [
+    {
+      "ExecutablePath": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\bin\\Release\\net10.0-windows\\publish\\win-x64\\NoBS.DesktopOrganizer.exe",
+      "Name": "",
+      "X": 850,
+      "Y": 512,
+      "Width": 918,
+      "Height": 597,
+      "KillOnSwitch": false,
+      "LaunchDelaySeconds": 0
+    },
+    {
+      "ExecutablePath": "C:\\Program Files\\Notepad\u002B\u002B\\notepad\u002B\u002B.exe",
+      "Name": "",
+      "X": -32000,
+      "Y": -32000,
+      "Width": 199,
+      "Height": 47,
+      "KillOnSwitch": false,
+      "LaunchDelaySeconds": 0
+    }
+  ],
+  "Apps": [
+    {
+      "ExecutablePath": "C:\\Program Files (x86)\\TegraRcmGUI\\TegraRcmGUI.exe",
+      "Name": "TegraRcmGUI",
+      "X": 272,
+      "Y": 437,
+      "Width": 513,
+      "Height": 387,
+      "KillOnSwitch": false,
+      "LaunchDelaySeconds": 1
+    }
+  ],
+  "WallpaperPath": "H:\\BACKUP\\IMAGE\\Video \u002B Image\\Photo \u0026 Video Archive\\Safekeeping\\WALLPAPERS\\99999999999.png",
+  "IsDirty": false
+}

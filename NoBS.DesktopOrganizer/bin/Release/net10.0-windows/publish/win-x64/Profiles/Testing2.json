@@ -1,0 +1,18 @@
+{
+  "Name": "Testing2",
+  "AccentColor": "#6B5BFF",
+  "Windows": [],
+  "Apps": [
+    {
+      "Name": "PKHeX",
+      "ExecutablePath": "C:\\Users\\Admin\\Downloads\\Gaming Stuff\\Pokemon\\PKHeX\\PKHeX.exe",
+      "KillOnSwitch": false,
+      "LaunchDelaySeconds": 2,
+      "X": 2075,
+      "Y": 779,
+      "Width": 1090,
+      "Height": 530
+    }
+  ],
+  "IsDirty": true
+}

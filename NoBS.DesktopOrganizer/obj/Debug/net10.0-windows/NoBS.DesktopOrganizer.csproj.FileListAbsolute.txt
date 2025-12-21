@@ -1,0 +1,16 @@
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Debug\net10.0-windows\NoBS.DesktopOrganizer.exe
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Debug\net10.0-windows\NoBS.DesktopOrganizer.deps.json
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Debug\net10.0-windows\NoBS.DesktopOrganizer.runtimeconfig.json
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Debug\net10.0-windows\NoBS.DesktopOrganizer.dll
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Debug\net10.0-windows\NoBS.DesktopOrganizer.pdb
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.UI.MainForm.resources
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.csproj.GenerateResource.cache
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.AssemblyInfoInputs.cache
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.AssemblyInfo.cs
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.dll
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\refint\NoBS.DesktopOrganizer.dll
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.pdb
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\NoBS.DesktopOrganizer.genruntimeconfig.cache
+C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\obj\Debug\net10.0-windows\ref\NoBS.DesktopOrganizer.dll

@@ -1,0 +1,313 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\ui\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\ui\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\helpers\\windowpositionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\helpers\\windowpositionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\helpers\\apprunner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\helpers\\apprunner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\profiles\\windowposition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\profiles\\windowposition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\profileapplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\profileapplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\ui\\appseditorpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\ui\\appseditorpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\apprunstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\apprunstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\profiles\\workspaceprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\profiles\\workspaceprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\profiles\\profilemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\profiles\\profilemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\ui\\createprofileform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\ui\\createprofileform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\core\\profiles\\profilevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\core\\profiles\\profilevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\ui\\inputdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\ui\\inputdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\helpers\\windowhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\helpers\\windowhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\ui\\theme.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\ui\\theme.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\utils\\jsonhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\utils\\jsonhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|c:\\users\\admin\\source\\repos\\nobs.desktoporganizer\\nobs.desktoporganizer\\nobs.desktoporganizer.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{626120A1-90FD-87AD-4706-5128F4B0AD9E}|NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj|solutionrelative:nobs.desktoporganizer\\nobs.desktoporganizer.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\MainForm.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\UI\\MainForm.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\MainForm.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\UI\\MainForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:05:04.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AppRunner.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\AppRunner.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Helpers\\AppRunner.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\AppRunner.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Helpers\\AppRunner.cs",
+              "ViewState": "AgIAAPoAAAAAAAAAAAAAAHMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T05:12:28.391Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AppsEditorPanel.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\AppsEditorPanel.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\UI\\AppsEditorPanel.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\AppsEditorPanel.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\UI\\AppsEditorPanel.cs",
+              "ViewState": "AgIAAEwBAAAAAAAAAAAAAF8BAABwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:40:19.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WindowPosition.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\WindowPosition.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\Profiles\\WindowPosition.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\WindowPosition.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\Profiles\\WindowPosition.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T13:14:17.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WindowPositionHelper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\WindowPositionHelper.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Helpers\\WindowPositionHelper.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\WindowPositionHelper.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Helpers\\WindowPositionHelper.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAwwBAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T07:05:56.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ProfileApplier.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\ProfileApplier.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\ProfileApplier.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\ProfileApplier.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\ProfileApplier.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAAAIsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T12:10:49.938Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppRunStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\AppRunStatus.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\AppRunStatus.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\AppRunStatus.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\AppRunStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-21T02:29:20.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "WorkspaceProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\WorkspaceProfile.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\Profiles\\WorkspaceProfile.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\WorkspaceProfile.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\Profiles\\WorkspaceProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:01:53.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProfileManager.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileManager.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileManager.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileManager.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileManager.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAmwDIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:02:02.133Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CreateProfileForm.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\CreateProfileForm.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\UI\\CreateProfileForm.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\CreateProfileForm.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\UI\\CreateProfileForm.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBUAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:03:11.701Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProfileValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileValidator.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileValidator.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileValidator.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Core\\Profiles\\ProfileValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:02:11.261Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "InputDialog.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\InputDialog.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\UI\\InputDialog.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\InputDialog.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\UI\\InputDialog.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAuwDEAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T03:40:38.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Program.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Program.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:05:24.277Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "WindowHelper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\WindowHelper.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Helpers\\WindowHelper.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Helpers\\WindowHelper.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Helpers\\WindowHelper.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAcwBUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T06:44:20.808Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Theme.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\Theme.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\UI\\Theme.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\UI\\Theme.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\UI\\Theme.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:32:45.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "JsonHelper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Utils\\JsonHelper.cs",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\Utils\\JsonHelper.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\Utils\\JsonHelper.cs",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\Utils\\JsonHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T10:03:31.805Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "NoBS.DesktopOrganizer.csproj",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj",
+              "RelativeDocumentMoniker": "NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj",
+              "RelativeToolTip": "NoBS.DesktopOrganizer\\NoBS.DesktopOrganizer.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-15T10:01:09.641Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
