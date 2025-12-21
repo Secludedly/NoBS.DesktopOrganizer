@@ -1,2 +1,0 @@
-C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Release\net10.0-windows\publish\win-x64\NoBS.DesktopOrganizer.pdb
-C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\bin\Release\net10.0-windows\publish\win-x64\NoBS.DesktopOrganizer.exe
