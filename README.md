@@ -136,6 +136,15 @@ Switch profiles, switch views, come back later — **status stays accurate**.
 - ✅ Wait-for-stable-window option
 - ✅ No forced window locking
 - ✅ Updates layout when *you* move windows
+- ✅ Hotkey-based profile switching
+- ✅ Per-app “force loading apps for X seconds”
+- ✅ Portable build w/ logging & profile system
+- ✅ Per-profile system volume control
+- ✅ Suggested apps tab
+- ✅ Force reposition of apps from disabled displays
+- ✅ Tray-icon context menu with full controls
+- ✅ Online/Offline status per profile
+- ✅ Fresh reload of apps to last task's coordinates
 
 ---
 
@@ -181,15 +190,9 @@ The core system is solid and already handles:
 
 > These are actively planned and designed — not vaporware.
 
-- 🔜 Multi-monitor profile awareness
-- 🔜 Per-app “force position for X seconds”
 - 🔜 Smarter stability detection for slow Electron apps
 - 🔜 Export / import profiles
-- 🔜 Hotkey-based profile switching
-- 🔜 Optional startup profile
-- 🔜 Read-only “presentation mode”
 - 🔜 UI polish and animations
-- 🔜 Portable build
 
 ---
 
