@@ -33,7 +33,16 @@ namespace NoBS.DesktopOrganizer.UI
 
             Paint += (_, e) =>
             {
-                e.Graphics.DrawRectangle(new Pen(Theme.Border), 0, 0, Width - 1, Height - 1);
+                // Draw crimson border
+                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+                }
+                // Draw inner shadow
+                using (var shadowPen = new Pen(Theme.ShadowDark, 1))
+                {
+                    e.Graphics.DrawRectangle(shadowPen, 1, 1, Width - 3, Height - 3);
+                }
             };
 
             BuildUI();
@@ -53,11 +62,12 @@ namespace NoBS.DesktopOrganizer.UI
         {
             var lblTitle = new Label
             {
-                Text = "Apps",
+                Text = "▌APPLICATIONS",
                 Left = 15,
                 Top = 10,
-                Font = new Font("Segoe UI Semibold", 10f),
-                ForeColor = Theme.Text
+                Font = Theme.SectionFont,
+                ForeColor = Theme.CrimsonBright,
+                AutoSize = true
             };
             Controls.Add(lblTitle);
 
@@ -66,15 +76,17 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 40,
                 Width = 240,
-                Height = 130,
-                BackColor = Theme.Panel,
+                Height = 150,
+                BackColor = Theme.Background,
                 ForeColor = Theme.Text,
-                BorderStyle = BorderStyle.FixedSingle,
+                BorderStyle = BorderStyle.None,
                 DrawMode = DrawMode.OwnerDrawFixed,
-                ItemHeight = 28
+                ItemHeight = 32,
+                Font = Theme.TextFont
             };
             lstApps.DrawItem += DrawAppItem;
             lstApps.SelectedIndexChanged += AppSelected;
+            lstApps.MouseDown += LstApps_MouseDown;
 
             appTip.ShowAlways = true;
             lstApps.MouseMove += (_, e) =>
@@ -89,21 +101,55 @@ namespace NoBS.DesktopOrganizer.UI
                     $"HWND: {(app.WindowHandle != IntPtr.Zero ? app.WindowHandle.ToString("X") : "N/A")}\n" +
                     $"Error: {app.LastError ?? "None"}");
             };
-            Controls.Add(lstApps);
+            // Add border around list
+            var appsContainer = new Panel
+            {
+                Left = 13,
+                Top = 38,
+                Width = lstApps.Width + 4,
+                Height = lstApps.Height + 4,
+                BackColor = Theme.DarkPanel
+            };
+            appsContainer.Paint += (s, e) =>
+            {
+                using (var pen = new Pen(Theme.BorderDark, 1))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, appsContainer.Width - 1, appsContainer.Height - 1);
+                }
+            };
+            Controls.Add(appsContainer);
+            appsContainer.Controls.Add(lstApps);
+            lstApps.Left = 2;
+            lstApps.Top = 2;
 
-            btnAdd = CreateButton("+ Add", 270, 40);
+            btnAdd = new AnimatedButton
+            {
+                Text = "+ ADD",
+                Left = 270,
+                Top = 40,
+                Width = 90,
+                Height = 32
+            };
             btnAdd.Click += AddApp;
             Controls.Add(btnAdd);
 
-            btnRemove = CreateButton("Remove", 270, 80);
+            btnRemove = new AnimatedButton
+            {
+                Text = "REMOVE",
+                Left = 270,
+                Top = 78,
+                Width = 90,
+                Height = 32
+            };
+            btnRemove.ForeColor = Theme.Danger;
             btnRemove.Click += RemoveApp;
             Controls.Add(btnRemove);
 
             var lblDelay = new Label
             {
                 Text = "Launch Delay",
-                Left = 15,
-                Top = lstApps.Bottom + 10,
+                Left = 266,
+                Top = btnRemove.Bottom + 12,
                 ForeColor = Theme.TextMuted,
                 AutoSize = true
             };
@@ -111,9 +157,9 @@ namespace NoBS.DesktopOrganizer.UI
 
             numDelay = new NumericUpDown
             {
-                Left = lblDelay.Right + 15,
-                Top = lblDelay.Top - 4,
-                Width = 60,
+                Left = 270,
+                Top = lblDelay.Bottom + 4,
+                Width = 90,
                 Minimum = 0,
                 Maximum = 300,
                 BackColor = Theme.Panel,
@@ -126,37 +172,18 @@ namespace NoBS.DesktopOrganizer.UI
             chkKill = new CheckBox
             {
                 Text = "Kill app on profile switch",
-                Left = numDelay.Right + 12,
-                Top = lblDelay.Top - 2,
+                Left = 270,
+                Top = numDelay.Bottom + 8,
+                Width = 200,
                 ForeColor = Theme.Text,
-                BackColor = Theme.Background,
-                AutoSize = true,
+                BackColor = Color.Transparent,
+                AutoSize = false,
                 Enabled = false
             };
             chkKill.CheckedChanged += KillFlagChanged;
             Controls.Add(chkKill);
         }
 
-        private Button CreateButton(string text, int x, int y)
-        {
-            var btn = new Button
-            {
-                Text = text,
-                Left = x,
-                Top = y,
-                Width = 90,
-                Height = 30,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Theme.Panel,
-                ForeColor = Theme.Text,
-                Cursor = Cursors.Hand
-            };
-            btn.FlatAppearance.BorderColor = Theme.Border;
-            btn.FlatAppearance.BorderSize = 1;
-            btn.MouseEnter += (_, __) => btn.FlatAppearance.BorderColor = Theme.Accent;
-            btn.MouseLeave += (_, __) => btn.FlatAppearance.BorderColor = Theme.Border;
-            return btn;
-        }
 
         public void LoadProfile(WorkspaceProfile workspaceProfile)
         {
@@ -249,6 +276,210 @@ namespace NoBS.DesktopOrganizer.UI
 
             app.KillOnSwitch = chkKill.Checked;
             profile.MarkDirty();
+        }
+
+        // =========================
+        // RIGHT-CLICK CONTEXT MENU
+        // =========================
+        private void LstApps_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = lstApps.IndexFromPoint(e.Location);
+                if (index >= 0 && index < lstApps.Items.Count)
+                {
+                    lstApps.SelectedIndex = index;
+                    var app = lstApps.Items[index] as WindowPosition;
+                    if (app != null)
+                    {
+                        var contextMenu = CreateAppContextMenu(app);
+                        contextMenu.Show(lstApps, e.Location);
+                    }
+                }
+            }
+        }
+
+        private ContextMenuStrip CreateAppContextMenu(WindowPosition app)
+        {
+            var menu = new ContextMenuStrip();
+
+            // Kill Process
+            var killItem = new ToolStripMenuItem("Kill Process");
+            killItem.Enabled = app.ProcessId.HasValue;
+            killItem.Click += (s, e) =>
+            {
+                if (app.ProcessId.HasValue)
+                {
+                    try
+                    {
+                        var process = System.Diagnostics.Process.GetProcessById(app.ProcessId.Value);
+                        if (!process.HasExited)
+                        {
+                            process.Kill();
+                            MessageBox.Show($"Killed process for '{app.Name}'", "Process Killed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            RefreshStatuses();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Failed to kill process: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            };
+            menu.Items.Add(killItem);
+
+            // Re-open
+            var reopenItem = new ToolStripMenuItem("Re-open");
+            reopenItem.Click += async (s, e) =>
+            {
+                // Kill if running
+                if (app.ProcessId.HasValue)
+                {
+                    try
+                    {
+                        var process = System.Diagnostics.Process.GetProcessById(app.ProcessId.Value);
+                        if (!process.HasExited)
+                        {
+                            process.Kill();
+                            await System.Threading.Tasks.Task.Delay(500);
+                        }
+                    }
+                    catch { }
+                }
+
+                // Store original saved coordinates
+                int targetX = app.X;
+                int targetY = app.Y;
+                int targetWidth = app.Width;
+                int targetHeight = app.Height;
+
+                // Check if saved coordinates are on an active monitor
+                var allScreens = System.Windows.Forms.Screen.AllScreens;
+                bool isOnActiveMonitor = allScreens.Any(screen => screen.Bounds.Contains(targetX, targetY));
+
+                if (!isOnActiveMonitor && targetWidth > 0 && targetHeight > 0)
+                {
+                    // Coordinates are on disabled monitor, adjust to primary
+                    var primaryMonitor = System.Windows.Forms.Screen.PrimaryScreen;
+                    if (targetWidth <= primaryMonitor.Bounds.Width && targetHeight <= primaryMonitor.Bounds.Height)
+                    {
+                        targetX = primaryMonitor.Bounds.X + (primaryMonitor.Bounds.Width - targetWidth) / 2;
+                        targetY = primaryMonitor.Bounds.Y + (primaryMonitor.Bounds.Height - targetHeight) / 2;
+                    }
+                    else
+                    {
+                        targetX = primaryMonitor.Bounds.X + 50;
+                        targetY = primaryMonitor.Bounds.Y + 50;
+                    }
+                }
+
+                // Reset process/window info
+                app.ProcessId = null;
+                app.WindowHandle = IntPtr.Zero;
+
+                // Re-launch
+                var apps = new List<WindowPosition> { app };
+                await runner.LaunchAppsAsync(apps);
+
+                // Wait for window to appear
+                await System.Threading.Tasks.Task.Delay(2000);
+
+                // Apply position if available
+                if (targetWidth > 0 && targetHeight > 0 && app.ProcessId.HasValue)
+                {
+                    IntPtr hWnd = app.WindowHandle;
+                    if (hWnd == IntPtr.Zero)
+                    {
+                        hWnd = NoBS.DesktopOrganizer.Core.Helpers.WindowPositionHelper.FindWindowByProcessId(app.ProcessId.Value);
+                        if (hWnd != IntPtr.Zero)
+                            app.WindowHandle = hWnd;
+                    }
+
+                    if (hWnd != IntPtr.Zero)
+                    {
+                        // Force window to target position (may be adjusted if monitor disabled)
+                        NoBS.DesktopOrganizer.Core.Helpers.WindowPositionHelper.SetWindowPosition(hWnd, targetX, targetY, targetWidth, targetHeight);
+
+                        // Wait and force again to ensure it sticks
+                        await System.Threading.Tasks.Task.Delay(300);
+                        NoBS.DesktopOrganizer.Core.Helpers.WindowPositionHelper.SetWindowPosition(hWnd, targetX, targetY, targetWidth, targetHeight);
+                    }
+                }
+
+                RefreshStatuses();
+            };
+            menu.Items.Add(reopenItem);
+
+            // Re-open Fresh
+            var reopenFreshItem = new ToolStripMenuItem("Re-open Fresh");
+            reopenFreshItem.Font = new Font(reopenFreshItem.Font, FontStyle.Bold);
+            reopenFreshItem.Click += async (s, e) =>
+            {
+                // Kill if running
+                if (app.ProcessId.HasValue)
+                {
+                    try
+                    {
+                        var process = System.Diagnostics.Process.GetProcessById(app.ProcessId.Value);
+                        if (!process.HasExited)
+                        {
+                            process.Kill();
+                            await System.Threading.Tasks.Task.Delay(500);
+                        }
+                    }
+                    catch { }
+                }
+
+                // Clear saved position/size
+                int savedX = app.X;
+                int savedY = app.Y;
+                int savedWidth = app.Width;
+                int savedHeight = app.Height;
+
+                app.X = 0;
+                app.Y = 0;
+                app.Width = 0;
+                app.Height = 0;
+                app.ProcessId = null;
+                app.WindowHandle = IntPtr.Zero;
+
+                // Re-launch fresh
+                var apps = new List<WindowPosition> { app };
+                await runner.LaunchAppsAsync(apps);
+
+                // Wait for window to stabilize, then get new size
+                await System.Threading.Tasks.Task.Delay(2000);
+
+                if (app.ProcessId.HasValue)
+                {
+                    IntPtr hWnd = app.WindowHandle;
+                    if (hWnd == IntPtr.Zero)
+                    {
+                        hWnd = NoBS.DesktopOrganizer.Core.Helpers.WindowPositionHelper.FindWindowByProcessId(app.ProcessId.Value);
+                        if (hWnd != IntPtr.Zero)
+                            app.WindowHandle = hWnd;
+                    }
+
+                    if (hWnd != IntPtr.Zero)
+                    {
+                        var rect = NoBS.DesktopOrganizer.Core.Helpers.WindowPositionHelper.GetWindowRectSafe(hWnd);
+                        if (rect.HasValue)
+                        {
+                            app.X = rect.Value.X;
+                            app.Y = rect.Value.Y;
+                            app.Width = rect.Value.Width;
+                            app.Height = rect.Value.Height;
+                        }
+                    }
+                }
+
+                profile?.MarkDirty();
+                RefreshStatuses();
+                MessageBox.Show($"Re-opened '{app.Name}' fresh. New position and size saved.", "Re-opened Fresh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            menu.Items.Add(reopenFreshItem);
+
+            return menu;
         }
 
         // =========================
@@ -353,29 +584,44 @@ namespace NoBS.DesktopOrganizer.UI
                     app.Status = NoBS.Core.Profiles.AppRunStatus.NotRunning;
             }
 
-            e.DrawBackground();
+            // Background
+            Color bgColor = (e.State & DrawItemState.Selected) != 0
+                ? Theme.CrimsonDark
+                : Theme.Background;
+            using (var bgBrush = new SolidBrush(bgColor))
+            {
+                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+            }
 
+            // Status color
             Color statusColor = app.Status switch
             {
-                NoBS.Core.Profiles.AppRunStatus.Running => Color.LimeGreen,
-                NoBS.Core.Profiles.AppRunStatus.Launching => Color.Gold,
-                NoBS.Core.Profiles.AppRunStatus.Failed => Color.OrangeRed,
-                _ => Color.DarkRed
+                NoBS.Core.Profiles.AppRunStatus.Running => Theme.StatusOnline,
+                NoBS.Core.Profiles.AppRunStatus.Launching => Color.FromArgb(200, 180, 40),
+                NoBS.Core.Profiles.AppRunStatus.Failed => Theme.Danger,
+                _ => Theme.StatusOffline
             };
 
-            using var brush = new SolidBrush(statusColor);
-            e.Graphics.FillEllipse(brush, e.Bounds.Left + 6, e.Bounds.Top + 6, 12, 12);
+            // Status circle
+            using (var statusBrush = new SolidBrush(statusColor))
+            {
+                e.Graphics.FillEllipse(statusBrush, e.Bounds.Left + 8, e.Bounds.Top + 10, 12, 12);
+            }
 
-            TextRenderer.DrawText(
-                e.Graphics,
-                app.Name,
-                Font,
-                new Rectangle(e.Bounds.Left + 26, e.Bounds.Top, e.Bounds.Width - 26, e.Bounds.Height),
-                Theme.Text,
-                TextFormatFlags.VerticalCenter | TextFormatFlags.Left
-            );
+            // App name text
+            Color textColor = (e.State & DrawItemState.Selected) != 0
+                ? Theme.TextBright
+                : Theme.Text;
+            using (var textBrush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawString(app.Name, Font, textBrush, e.Bounds.Left + 28, e.Bounds.Top + 8);
+            }
 
-            e.DrawFocusRectangle();
+            // Bottom border
+            using (var borderPen = new Pen(Theme.BorderDark, 1))
+            {
+                e.Graphics.DrawLine(borderPen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+            }
         }
 
         // =========================

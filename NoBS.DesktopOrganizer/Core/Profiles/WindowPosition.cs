@@ -53,6 +53,7 @@ namespace NoBS.Core.Profiles
         // Optional flags
         public bool KillOnSwitch { get; set; } = false;
         public int LaunchDelaySeconds { get; set; } = 0;
+        public string AssignedMonitorDeviceName { get; set; } = "";
 
         // Constructor
         public WindowPosition() { }

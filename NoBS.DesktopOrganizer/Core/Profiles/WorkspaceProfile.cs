@@ -3,20 +3,31 @@ using System.Collections.Generic;
 
 namespace NoBS.Core.Profiles
 {
+    public class MonitorSettings
+    {
+        public string DeviceName { get; set; } = ""; // e.g. \\.\DISPLAY1
+        public bool Enabled { get; set; } = true;   // Whether this monitor is enabled in the profile
+        public bool IsPrimary { get; set; } = false; // Which monitor should be primary
+        public string AssignedMonitorDeviceName { get; set; } = ""; // e.g., "\\.\DISPLAY2"
+    }
+
     [Serializable]
     public class WorkspaceProfile
     {
+        public override string ToString()
+        {
+            return Name;
+        }
         public string Name { get; set; } = string.Empty;
         public string AccentColor { get; set; } = "#6B5BFF";
-
+        public List<MonitorSettings> Monitors { get; set; } = new();
+        public int? SystemVolumePercent { get; set; } = 100;
         public List<WindowPosition> Windows { get; set; } = new();
         public List<WindowPosition> Apps { get; set; } = new();
-
-        // Wallpaper configuration (optional)
         public string? WallpaperPath { get; set; } = null;
 
         // ============================
-        // DIRTY STATE (Mission 1)
+        // DIRTY STATE
         // ============================
 
         [NonSerialized]
@@ -50,7 +61,7 @@ namespace NoBS.Core.Profiles
     }
 
     // ============================
-    // FUTURE PROFILE TYPES (KEEP)
+    // FUTURE PROFILE TYPES
     // ============================
 
     public class AppProfile

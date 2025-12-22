@@ -3,9 +3,34 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>NoBS - Desktop Organizer</AssemblyTitle>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Authors>Secludedly</Authors>
+    <Product>NoBS - Desktop Organizer</Product>
+    <Description>Desktop organizer</Description>
+    <PackageProjectUrl>https://github.com/Secludedly</PackageProjectUrl>
+    <Copyright>© 2025 Secludedly. All rights reserved.</Copyright>
+    <PackageIcon>f39589df-e9c0-4533-9702-7c382609df87.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Secludedly/NoBS.DesktopOrganizer</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Pictures\f39589df-e9c0-4533-9702-7c382609df87.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSCore" Version="1.2.1.2" />
+  </ItemGroup>
 
 </Project>

@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>C:\Users\Admin\source\repos\NoBS.DesktopOrganizer\NoBS.DesktopOrganizer\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="UI\AnimatedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="UI\AppsEditorPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -15,6 +18,9 @@
     </Compile>
     <Compile Update="UI\MainForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="UI\SuggestionsPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Update="UI\WallpaperEditorPanel.cs">
       <SubType>Component</SubType>

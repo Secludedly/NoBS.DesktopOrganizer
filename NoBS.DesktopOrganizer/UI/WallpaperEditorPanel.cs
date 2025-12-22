@@ -27,7 +27,16 @@ namespace NoBS.DesktopOrganizer.UI
 
             Paint += (_, e) =>
             {
-                e.Graphics.DrawRectangle(new Pen(Theme.Border), 0, 0, Width - 1, Height - 1);
+                // Draw crimson border
+                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+                }
+                // Draw inner shadow
+                using (var shadowPen = new Pen(Theme.ShadowDark, 1))
+                {
+                    e.Graphics.DrawRectangle(shadowPen, 1, 1, Width - 3, Height - 3);
+                }
             };
 
             BuildUI();
@@ -38,26 +47,39 @@ namespace NoBS.DesktopOrganizer.UI
             // Title Label
             lblTitle = new Label
             {
-                Text = "Wallpaper",
+                Text = "▌WALLPAPER",
                 Left = 15,
                 Top = 10,
-                Font = new Font("Segoe UI Semibold", 10f),
-                ForeColor = Theme.Text,
+                Font = Theme.SectionFont,
+                ForeColor = Theme.CrimsonBright,
                 AutoSize = true
             };
             Controls.Add(lblTitle);
 
             // Browse Button
-            btnBrowse = CreateButton("Browse...", 15, 40);
-            btnBrowse.Width = 100;
+            btnBrowse = new AnimatedButton
+            {
+                Text = "BROWSE",
+                Left = 15,
+                Top = 40,
+                Width = 100,
+                Height = 32
+            };
             btnBrowse.Click += BrowseWallpaper;
             Controls.Add(btnBrowse);
 
             // Clear Button (remove wallpaper from profile)
-            btnClear = CreateButton("Clear", 125, 40);
-            btnClear.Width = 80;
+            btnClear = new AnimatedButton
+            {
+                Text = "CLEAR",
+                Left = 125,
+                Top = 40,
+                Width = 80,
+                Height = 32,
+                Enabled = false
+            };
+            btnClear.ForeColor = Theme.Danger;
             btnClear.Click += ClearWallpaper;
-            btnClear.Enabled = false;
             Controls.Add(btnClear);
 
             // File Path Label
@@ -81,49 +103,35 @@ namespace NoBS.DesktopOrganizer.UI
                 Top = 40,
                 Width = 240,
                 Height = 135,
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Theme.Panel,
+                BorderStyle = BorderStyle.None,
+                BackColor = Theme.Background,
                 SizeMode = PictureBoxSizeMode.Zoom
+            };
+            picThumbnail.Paint += (s, e) =>
+            {
+                using (var pen = new Pen(Theme.BorderDark, 1))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, picThumbnail.Width - 1, picThumbnail.Height - 1);
+                }
             };
             Controls.Add(picThumbnail);
 
             // "No wallpaper" overlay label
             lblNoWallpaper = new Label
             {
-                Text = "No wallpaper selected",
+                Text = "NO WALLPAPER",
                 Left = 230,
                 Top = 40,
                 Width = 240,
                 Height = 135,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 9f),
+                Font = Theme.StatusFont,
                 ForeColor = Theme.TextMuted,
                 BackColor = Theme.Panel,
                 Visible = true
             };
             Controls.Add(lblNoWallpaper);
             lblNoWallpaper.BringToFront();
-        }
-
-        private Button CreateButton(string text, int x, int y)
-        {
-            var btn = new Button
-            {
-                Text = text,
-                Left = x,
-                Top = y,
-                Width = 90,
-                Height = 30,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Theme.Panel,
-                ForeColor = Theme.Text,
-                Cursor = Cursors.Hand
-            };
-            btn.FlatAppearance.BorderColor = Theme.Border;
-            btn.FlatAppearance.BorderSize = 1;
-            btn.MouseEnter += (_, __) => btn.FlatAppearance.BorderColor = Theme.Accent;
-            btn.MouseLeave += (_, __) => btn.FlatAppearance.BorderColor = Theme.Border;
-            return btn;
         }
 
         // ============================
