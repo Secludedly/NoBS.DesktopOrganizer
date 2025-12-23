@@ -7,7 +7,7 @@
 <br/>
 
 **A no-bullshit Windows workspace and desktop layout manager.**  
-Launch apps. Restore layouts. Stay out of your way. No fluff, much organization.
+Launch apps. Restore layouts. Stay out of your way. No bullshit, just organization.
 
 </div>
 
@@ -15,13 +15,49 @@ Launch apps. Restore layouts. Stay out of your way. No fluff, much organization.
 
 <div align="center">
 
-NoBS Desktop Organizer is a **lightweight Windows desktop workspace manager** that launches applications, tracks their windows, and remembers their size and position — without locking your desktop or fighting user input.
+NoBS Desktop Organizer is a **lightweight Windows 10/11 desktop workspace manager** that launches applications, tracks their windows, and remembers their size and position — without locking your desktop or fighting user input.
 
 This is **not** a tiling window manager.  
 This is **not** an overlay-based gimmick.  
-This is a tool built for people who want their desktop to behave consistently **without losing control**.
+This is a tool built for people who want their desktop to behave consistently without losing control.
+
+**No bullshit.**
+
+---
+
+<img src="https://i.imgur.com/a6aKVC2.gif" alt="NoBS Desktop Organizer Program"/>
+<img src="https://i.imgur.com/yEF9eM6.gif" alt="NoBS Desktop Organizer Apply"/>
+<img src="https://i.imgur.com/BKdPKCW.gif" alt="NoBS Desktop Organizer Kill"/>
 
 </div>
+
+---
+
+## 🧩 Features
+
+- ✅ Profile-based desktop layouts
+- ✅ App launch sequencing
+- ✅ Live window tracking
+- ✅ Wallpaper change per profile
+- ✅ Volume adjust per profile
+- ✅ PID & HWND persistence
+- ✅ Electron / UWP friendly
+- ✅ Tray icon support
+- ✅ Tray-icon context menu with full controls
+- ✅ Read current windows upon profile creation
+- ✅ Kill-on-switch support
+- ✅ Launch delay per app
+- ✅ Wait-for-stable-window option
+- ✅ No forced window locking
+- ✅ Updates layout when *you* move windows
+- ✅ Hotkey-based profile switching
+- ✅ Per-app “force loading apps for X seconds”
+- ✅ Portable build w/ logging & profile system
+- ✅ Per-profile system volume control
+- ✅ Suggested apps tab
+- ✅ Force reposition of apps from disabled displays
+- ✅ Online/Offline status per profile
+- ✅ Fresh reload of apps to last task's coordinates
 
 ---
 
@@ -34,7 +70,6 @@ Most Windows “workspace” or “window manager” tools fall into one of two 
 
 **NoBS Desktop Organizer sits in the middle — intentionally.**
 
-It:
 - Launches apps when you want
 - Watches windows after launch
 - Learns when *you* move or resize them
@@ -120,31 +155,6 @@ Live indicators show:
 - Failed
 
 Switch profiles, switch views, come back later — **status stays accurate**.
-
----
-
-## 🧩 Features
-
-- ✅ Profile-based desktop layouts
-- ✅ App launch sequencing
-- ✅ Live window tracking
-- ✅ PID & HWND persistence
-- ✅ Electron / UWP friendly
-- ✅ Tray icon support
-- ✅ Kill-on-switch support
-- ✅ Launch delay per app
-- ✅ Wait-for-stable-window option
-- ✅ No forced window locking
-- ✅ Updates layout when *you* move windows
-- ✅ Hotkey-based profile switching
-- ✅ Per-app “force loading apps for X seconds”
-- ✅ Portable build w/ logging & profile system
-- ✅ Per-profile system volume control
-- ✅ Suggested apps tab
-- ✅ Force reposition of apps from disabled displays
-- ✅ Tray-icon context menu with full controls
-- ✅ Online/Offline status per profile
-- ✅ Fresh reload of apps to last task's coordinates
 
 ---
 
