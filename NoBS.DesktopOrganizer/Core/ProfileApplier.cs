@@ -39,10 +39,17 @@ namespace NoBS.DesktopOrganizer.Core
             }
 
             // -----------------------------
-            // Minimize all currently visible windows
+            // Minimize all currently visible windows (only if NOT snapshot-based)
             // -----------------------------
-            Helpers.Logger.LogInfo("Minimizing all user windows");
-            WindowHelper.MinimizeAllUserWindows();
+            if (!profile.CreatedFromSnapshot)
+            {
+                Helpers.Logger.LogInfo("Minimizing all user windows (non-snapshot profile)");
+                WindowHelper.MinimizeAllUserWindows();
+            }
+            else
+            {
+                Helpers.Logger.LogInfo("Skipping window minimization (snapshot-based profile)");
+            }
 
             // -----------------------------
             // Kill apps marked KillOnSwitch

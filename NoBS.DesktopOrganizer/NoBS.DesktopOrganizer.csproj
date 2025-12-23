@@ -16,6 +16,8 @@
     <Copyright>© 2025 Secludedly. All rights reserved.</Copyright>
     <PackageIcon>f39589df-e9c0-4533-9702-7c382609df87.png</PackageIcon>
     <RepositoryUrl>https://github.com/Secludedly/NoBS.DesktopOrganizer</RepositoryUrl>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

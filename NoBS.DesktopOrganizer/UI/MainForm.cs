@@ -114,7 +114,7 @@ namespace NoBS.DesktopOrganizer.UI
         {
             SuspendLayout();
 
-            Text = "NoBS - Desktop Organizer";
+            Text = $"NoBS - Desktop Organizer (v{AppVersion.Current})";
             ClientSize = new Size(1000, 700);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -518,6 +518,14 @@ namespace NoBS.DesktopOrganizer.UI
             rightPanel.Controls.Add(volumeSlider);
             rightPanel.Controls.Add(volumeBox);
 
+            // Set default volume to 30 on program load
+            int defaultVolume = 30;
+            volumeSlider.Value = defaultVolume;
+            volumeBox.Value = defaultVolume;
+
+            // Immediately apply system volume
+            AudioHelper.SetSystemVolume(defaultVolume);
+
             // ============================
             // BOTTOM BAR
             // ============================
@@ -659,6 +667,8 @@ namespace NoBS.DesktopOrganizer.UI
 
                 try
                 {
+                    // Minimize all user windows BEFORE applying profile apps
+                    WindowHelper.MinimizeAllUserWindows();
                     await profileApplier.ApplyProfileAsync(currentProfile);
 
                     // Update online status
@@ -686,6 +696,7 @@ namespace NoBS.DesktopOrganizer.UI
             {
                 if (currentProfile == null) return;
                 appRunner.KillAppsByProfile(currentProfile.Apps);
+                RestoreStartupWallpaper();
 
                 // Update status to offline
                 isProfileApplied = false;
@@ -880,26 +891,8 @@ namespace NoBS.DesktopOrganizer.UI
 
         private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            // Restore original wallpaper on exit
-            if (!string.IsNullOrEmpty(startupWallpaper))
-            {
-                Logger.LogInfo($"Restoring startup wallpaper: {startupWallpaper}");
-                bool success = WallpaperHelper.SetWallpaper(startupWallpaper);
-                if (success)
-                {
-                    Logger.LogInfo("Startup wallpaper restored successfully");
-                }
-                else
-                {
-                    Logger.LogWarning("Failed to restore startup wallpaper");
-                }
-            }
-            else
-            {
-                Logger.LogInfo("No startup wallpaper to restore");
-            }
+            RestoreStartupWallpaper();
 
-            // Cleanup tray icon
             if (trayIcon != null)
             {
                 trayIcon.Visible = false;
@@ -951,13 +944,14 @@ namespace NoBS.DesktopOrganizer.UI
                 if (currentProfile != null)
                 {
                     appRunner.KillAppsByProfile(currentProfile.Apps);
+                    RestoreStartupWallpaper();
                     trayIcon.ShowBalloonTip(2000, "NoBS", $"Killed all apps for profile '{currentProfile.Name}'", ToolTipIcon.Info);
                 }
             };
             menu.Items.Add(killAllItem);
 
             // Kill Profile & Exit
-            var killAndExitItem = new ToolStripMenuItem("Kill Profile && Exit NoBS");
+            var killAndExitItem = new ToolStripMenuItem("Kill Profile & Exit NoBS");
             killAndExitItem.ForeColor = Color.DarkRed;
             killAndExitItem.Click += (s, e) =>
             {
@@ -972,6 +966,7 @@ namespace NoBS.DesktopOrganizer.UI
                     if (currentProfile != null)
                     {
                         appRunner.KillAppsByProfile(currentProfile.Apps);
+                        RestoreStartupWallpaper();
                     }
                     Application.Exit();
                 }
@@ -1171,6 +1166,7 @@ namespace NoBS.DesktopOrganizer.UI
             {
                 appRunner.KillAppsByProfile(profile.Apps);
                 MessageBox.Show(this, $"Killed all apps for profile '{profile.Name}'", "Apps Killed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RestoreStartupWallpaper();
             };
             menu.Items.Add(killAllItem);
 
@@ -1187,6 +1183,28 @@ namespace NoBS.DesktopOrganizer.UI
 
             return menu;
         }
+
+        private void RestoreStartupWallpaper()
+        {
+            if (!string.IsNullOrEmpty(startupWallpaper))
+            {
+                Logger.LogInfo($"Restoring startup wallpaper: {startupWallpaper}");
+                bool success = WallpaperHelper.SetWallpaper(startupWallpaper);
+                if (success)
+                {
+                    Logger.LogInfo("Startup wallpaper restored successfully");
+                }
+                else
+                {
+                    Logger.LogWarning("Failed to restore startup wallpaper");
+                }
+            }
+            else
+            {
+                Logger.LogInfo("No startup wallpaper to restore");
+            }
+        }
+
 
         private void DrawProfileItem(object sender, DrawItemEventArgs e)
         {
@@ -1237,12 +1255,69 @@ namespace NoBS.DesktopOrganizer.UI
 
         private void CreateProfile(object? sender, EventArgs e)
         {
-            string name = Interaction.InputBox("Enter profile name:", "Create Profile", "");
-            if (string.IsNullOrEmpty(name)) return;
+            string name = Interaction.InputBox(
+                "Enter profile name:",
+                "Create Profile",
+                ""
+            );
 
-            var profile = new WorkspaceProfile { Name = name };
+            if (string.IsNullOrWhiteSpace(name))
+                return;
+
+            var profile = new WorkspaceProfile
+            {
+                Name = name
+            };
+
+            var result = MessageBox.Show(
+                "Would you like to select from a list of currently opened windows to add to this profile?\n\n" +
+                "Yes = Choose windows to include\nNo = Start fresh",
+                "Create Profile",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    var currentWindows = ProfileSnapshotHelper.GetCurrentWindows();
+
+                    if (currentWindows.Count == 0)
+                    {
+                        MessageBox.Show(
+                            this,
+                            "No eligible windows found on the desktop.",
+                            "No Windows Detected",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
+                    }
+                    else
+                    {
+                        var selectedWindows = ProfileSnapshotHelper.ShowWindowSelectionDialog(currentWindows);
+
+                        profile.Apps.AddRange(selectedWindows);
+                        profile.CreatedFromSnapshot = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        this,
+                        $"Failed to capture/select windows:\n\n{ex.Message}",
+                        "Window Selection Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+            }
+
+            // Save the profile and reload UI
             ProfileManager.SaveProfile(profile);
             LoadProfiles();
+
+            // Auto-select the newly created profile
             lstProfiles.SelectedItem = lstProfiles.Items
                 .OfType<WorkspaceProfile>()
                 .FirstOrDefault(p => p.Name == name);
