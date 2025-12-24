@@ -44,8 +44,13 @@ namespace NoBS.DesktopOrganizer.UI
         private NumericUpDown volumeBox;
         private Label lblVolume;
 
+        private Label lblVirtualDesktop;
+        private ComboBox cboVirtualDesktop;
+        private CheckBox chkRenameDesktop;
+
         private WorkspaceProfile? currentProfile;
         private bool isProfileApplied = false;
+        private bool isLoadingProfile = false;
 
         public MainForm()
         {
@@ -115,7 +120,7 @@ namespace NoBS.DesktopOrganizer.UI
             SuspendLayout();
 
             Text = $"NoBS - Desktop Organizer (v{AppVersion.Current})";
-            ClientSize = new Size(1000, 700);
+            ClientSize = new Size(1000, 800);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Font = Theme.TextFont;
@@ -350,7 +355,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Width = ClientSize.Width - 245,
                 Height = ClientSize.Height - 80,
                 BackColor = Theme.DarkGray,
-                AutoScroll = false
+                AutoScroll = true
             };
             rightPanel.Paint += (s, e) =>
             {
@@ -496,8 +501,10 @@ namespace NoBS.DesktopOrganizer.UI
             volumeSlider.Scroll += (_, __) =>
             {
                 volumeBox.Value = volumeSlider.Value;
-                AudioHelper.SetSystemVolume(volumeSlider.Value);
-                if (currentProfile != null)
+
+                // Only update the profile's stored volume, do NOT change system volume
+                // System volume will only be applied when the "Apply" button is clicked
+                if (!isLoadingProfile && currentProfile != null)
                 {
                     currentProfile.SystemVolumePercent = volumeSlider.Value;
                     currentProfile.MarkDirty();
@@ -507,8 +514,10 @@ namespace NoBS.DesktopOrganizer.UI
             volumeBox.ValueChanged += (_, __) =>
             {
                 volumeSlider.Value = (int)volumeBox.Value;
-                AudioHelper.SetSystemVolume((int)volumeBox.Value);
-                if (currentProfile != null)
+
+                // Only update the profile's stored volume, do NOT change system volume
+                // System volume will only be applied when the "Apply" button is clicked
+                if (!isLoadingProfile && currentProfile != null)
                 {
                     currentProfile.SystemVolumePercent = (int)volumeBox.Value;
                     currentProfile.MarkDirty();
@@ -525,6 +534,70 @@ namespace NoBS.DesktopOrganizer.UI
 
             // Immediately apply system volume
             AudioHelper.SetSystemVolume(defaultVolume);
+
+            // ============================
+            // VIRTUAL DESKTOP
+            // ============================
+            lblVirtualDesktop = new Label
+            {
+                Text = "  ▌VIRTUAL DESKTOP",
+                Left = 20,
+                Top = volumeSlider.Bottom + 15,
+                AutoSize = true,
+                ForeColor = Theme.CrimsonBright,
+                Font = Theme.SectionFont,
+                Visible = true
+            };
+            rightPanel.Controls.Add(lblVirtualDesktop);
+
+            cboVirtualDesktop = new ComboBox
+            {
+                Left = 20,
+                Top = lblVirtualDesktop.Bottom + 6,
+                Width = rightPanel.Width - 40,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                ForeColor = Theme.Text,
+                BackColor = Theme.Panel,
+                Font = Theme.TextFont,
+                FlatStyle = FlatStyle.Flat,
+                Visible = true
+            };
+            rightPanel.Controls.Add(cboVirtualDesktop);
+
+            chkRenameDesktop = new CheckBox
+            {
+                Text = "Rename virtual desktop to profile name on apply",
+                Left = 20,
+                Top = cboVirtualDesktop.Bottom + 8,
+                AutoSize = true,
+                ForeColor = Theme.Text,
+                Font = Theme.TextFont,
+                Visible = true
+            };
+            rightPanel.Controls.Add(chkRenameDesktop);
+
+            // Event handlers for Virtual Desktop controls
+            cboVirtualDesktop.SelectedIndexChanged += (_, __) =>
+            {
+                if (!isLoadingProfile && currentProfile != null)
+                {
+                    var selectedDesktop = cboVirtualDesktop.SelectedItem as DesktopInfo;
+                    currentProfile.VirtualDesktopId = selectedDesktop?.Id;
+                    currentProfile.MarkDirty();
+                }
+            };
+
+            chkRenameDesktop.CheckedChanged += (_, __) =>
+            {
+                if (!isLoadingProfile && currentProfile != null)
+                {
+                    currentProfile.RenameVirtualDesktop = chkRenameDesktop.Checked;
+                    currentProfile.MarkDirty();
+                }
+            };
+
+            // Initial population of virtual desktops
+            RefreshVirtualDesktopsList();
 
             // ============================
             // BOTTOM BAR
@@ -662,11 +735,73 @@ namespace NoBS.DesktopOrganizer.UI
             {
                 if (currentProfile == null) return;
 
+                // ============================
+                // VIRTUAL DESKTOP CONFIRMATION
+                // ============================
+                bool switchDesktop = false;
+
+                if (!string.IsNullOrWhiteSpace(currentProfile.VirtualDesktopId))
+                {
+                    var desktop = VirtualDesktopHelper.FindDesktopById(currentProfile.VirtualDesktopId);
+                    if (desktop != null)
+                    {
+                        var desktopInfo = VirtualDesktopHelper.GetAllDesktops()
+                            .FirstOrDefault(d => d.Id == currentProfile.VirtualDesktopId);
+                        string desktopName = desktopInfo?.Name ?? "selected desktop";
+
+                        DialogResult result = MessageBox.Show(
+                            this,
+                            $"Apply this profile to {desktopName}, or apply to current desktop?\n\n" +
+                            $"Yes = Switch to {desktopName} then apply\n" +
+                            $"No = Apply to current desktop\n" +
+                            $"Cancel = Cancel operation",
+                            "Virtual Desktop Confirmation",
+                            MessageBoxButtons.YesNoCancel,
+                            MessageBoxIcon.Question
+                        );
+
+                        if (result == DialogResult.Cancel)
+                            return;
+
+                        switchDesktop = (result == DialogResult.Yes);
+                    }
+                    else
+                    {
+                        // Desktop no longer exists
+                        MessageBox.Show(this,
+                            "The virtual desktop associated with this profile no longer exists.\n" +
+                            "The profile will be applied to the current desktop.",
+                            "Desktop Not Found",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        currentProfile.VirtualDesktopId = null;
+                        currentProfile.MarkDirty();
+                    }
+                }
+
                 btnApply.Enabled = false;
                 UpdateStatusBar("Applying profile...");
 
                 try
                 {
+                    // Switch desktop if requested
+                    if (switchDesktop && !string.IsNullOrWhiteSpace(currentProfile.VirtualDesktopId))
+                    {
+                        UpdateStatusBar("Switching virtual desktop...");
+                        bool switched = VirtualDesktopHelper.SwitchToDesktop(currentProfile.VirtualDesktopId);
+
+                        if (!switched)
+                        {
+                            MessageBox.Show(this,
+                                "Failed to switch to the selected virtual desktop.\n" +
+                                "The profile will be applied to the current desktop.",
+                                "Desktop Switch Failed",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                        // Wait for desktop switch animation
+                        await Task.Delay(800);
+                    }
+
                     // Minimize all user windows BEFORE applying profile apps
                     WindowHelper.MinimizeAllUserWindows();
                     await profileApplier.ApplyProfileAsync(currentProfile);
@@ -792,8 +927,61 @@ namespace NoBS.DesktopOrganizer.UI
             int currentVolume = AudioHelper.GetSystemVolume();
             int profileVolume = currentProfile.SystemVolumePercent ?? currentVolume;
 
-            volumeSlider.Value = profileVolume;
-            volumeBox.Value = profileVolume;
+            // Prevent volume changes while loading profile
+            isLoadingProfile = true;
+            try
+            {
+                volumeSlider.Value = profileVolume;
+                volumeBox.Value = profileVolume;
+            }
+            finally
+            {
+                isLoadingProfile = false;
+            }
+
+            // -------------------------------
+            // Load virtual desktop settings
+            // -------------------------------
+            isLoadingProfile = true;
+            try
+            {
+                RefreshVirtualDesktopsList();
+
+                if (currentProfile.VirtualDesktopId != null)
+                {
+                    // Find and select saved desktop
+                    bool found = false;
+                    for (int i = 0; i < cboVirtualDesktop.Items.Count; i++)
+                    {
+                        if (cboVirtualDesktop.Items[i] is DesktopInfo info &&
+                            info.Id == currentProfile.VirtualDesktopId)
+                        {
+                            cboVirtualDesktop.SelectedIndex = i;
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    // If not found, reset to "None"
+                    if (!found)
+                    {
+                        cboVirtualDesktop.SelectedIndex = 0;
+                        currentProfile.VirtualDesktopId = null;
+                        currentProfile.MarkDirty();
+                        Logger.LogWarning($"Saved virtual desktop {currentProfile.VirtualDesktopId} no longer exists");
+                    }
+                }
+                else
+                {
+                    cboVirtualDesktop.SelectedIndex = 0;
+                }
+
+                chkRenameDesktop.Checked = currentProfile.RenameVirtualDesktop;
+            }
+            finally
+            {
+                isLoadingProfile = false;
+            }
         }
 
         private void ClearProfile()
@@ -806,6 +994,8 @@ namespace NoBS.DesktopOrganizer.UI
             wallpaperEditor.Clear();
             volumeSlider.Value = AudioHelper.GetSystemVolume();
             volumeBox.Value = AudioHelper.GetSystemVolume();
+            cboVirtualDesktop.SelectedIndex = 0;
+            chkRenameDesktop.Checked = false;
             SetAppsEditorEnabled(false);
             btnApply.Enabled = false;
             btnKill.Enabled = false;
@@ -836,6 +1026,9 @@ namespace NoBS.DesktopOrganizer.UI
                 lblVolume.Visible = true;
                 volumeSlider.Visible = true;
                 volumeBox.Visible = true;
+                lblVirtualDesktop.Visible = true;
+                cboVirtualDesktop.Visible = true;
+                chkRenameDesktop.Visible = true;
                 lblProfileTitle.Visible = true;
                 lblOnlineStatus.Visible = currentProfile != null;
                 btnToggleSuggestions.Text = "SUGGESTIONS";
@@ -864,9 +1057,65 @@ namespace NoBS.DesktopOrganizer.UI
                 lblVolume.Visible = false;
                 volumeSlider.Visible = false;
                 volumeBox.Visible = false;
+                lblVirtualDesktop.Visible = false;
+                cboVirtualDesktop.Visible = false;
+                chkRenameDesktop.Visible = false;
                 lblProfileTitle.Visible = false;
                 lblOnlineStatus.Visible = false;
                 btnToggleSuggestions.Text = "BACK";
+            }
+        }
+
+        private void RefreshVirtualDesktopsList()
+        {
+            try
+            {
+                Logger.LogInfo("RefreshVirtualDesktopsList: Starting...");
+                cboVirtualDesktop.Items.Clear();
+
+                // Add "None" option at index 0
+                var noneOption = new DesktopInfo { Id = null, Name = "(None - No Desktop Association)" };
+                cboVirtualDesktop.Items.Add(noneOption);
+                Logger.LogInfo("RefreshVirtualDesktopsList: Added 'None' option");
+
+                if (!VirtualDesktopHelper.IsSupported())
+                {
+                    cboVirtualDesktop.SelectedIndex = 0;
+                    cboVirtualDesktop.Enabled = false;
+                    chkRenameDesktop.Enabled = false;
+                    Logger.LogWarning("Virtual Desktop API not supported on this Windows version");
+                    MessageBox.Show(this,
+                        "Virtual Desktop features require Windows 10 build 19041 (20H1) or later.\n" +
+                        "The Virtual Desktop dropdown will be disabled.",
+                        "Virtual Desktop Not Supported",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                var desktops = VirtualDesktopHelper.GetAllDesktops();
+                Logger.LogInfo($"RefreshVirtualDesktopsList: Found {desktops.Count} virtual desktops");
+
+                foreach (var desktop in desktops)
+                {
+                    cboVirtualDesktop.Items.Add(desktop);
+                    Logger.LogInfo($"RefreshVirtualDesktopsList: Added desktop '{desktop.Name}' (ID: {desktop.Id})");
+                }
+
+                // Default: First actual desktop (index 1) or "None"
+                cboVirtualDesktop.SelectedIndex = desktops.Count > 0 ? 1 : 0;
+                cboVirtualDesktop.Enabled = true;
+                chkRenameDesktop.Enabled = true;
+                Logger.LogInfo($"RefreshVirtualDesktopsList: Completed. Total items: {cboVirtualDesktop.Items.Count}");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("RefreshVirtualDesktopsList: Exception occurred", ex);
+                MessageBox.Show(this,
+                    $"Error loading virtual desktops: {ex.Message}\n\nThe Virtual Desktop dropdown will be disabled.",
+                    "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cboVirtualDesktop.Enabled = false;
+                chkRenameDesktop.Enabled = false;
             }
         }
 

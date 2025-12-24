@@ -25,6 +25,8 @@ namespace NoBS.Core.Profiles
         public List<WindowPosition> Windows { get; set; } = new();
         public List<WindowPosition> Apps { get; set; } = new();
         public string? WallpaperPath { get; set; } = null;
+        public string? VirtualDesktopId { get; set; } = null;
+        public bool RenameVirtualDesktop { get; set; } = false;
         public bool CreatedFromSnapshot { get; set; } = false;
 
 

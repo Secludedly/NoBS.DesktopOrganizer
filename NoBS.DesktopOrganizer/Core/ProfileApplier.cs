@@ -26,6 +26,18 @@ namespace NoBS.DesktopOrganizer.Core
             Helpers.Logger.LogInfo($"Applying profile: {profile.Name}");
 
             // -----------------------------
+            // Rename virtual desktop if requested
+            // -----------------------------
+            if (profile.RenameVirtualDesktop && !string.IsNullOrWhiteSpace(profile.VirtualDesktopId))
+            {
+                Helpers.Logger.LogInfo($"Renaming virtual desktop to '{profile.Name}'");
+                bool renamed = VirtualDesktopHelper.RenameDesktop(profile.VirtualDesktopId, profile.Name);
+
+                if (!renamed)
+                    Helpers.Logger.LogWarning("Failed to rename virtual desktop");
+            }
+
+            // -----------------------------
             // Apply system volume
             // -----------------------------
             if (profile.SystemVolumePercent.HasValue)
