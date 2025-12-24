@@ -53,7 +53,6 @@ This is a tool built for people who want their desktop to behave consistently wi
 - ✅ Hotkey-based profile switching
 - ✅ Per-app “force loading apps for X seconds”
 - ✅ Portable build w/ logging & profile system
-- ✅ Per-profile system volume control
 - ✅ Suggested apps tab
 - ✅ Force reposition of apps from disabled displays
 - ✅ Online/Offline status per profile
