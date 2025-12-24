@@ -40,6 +40,7 @@ This is a tool built for people who want their desktop to behave consistently wi
 - ✅ Live window tracking
 - ✅ Wallpaper change per profile
 - ✅ Volume adjust per profile
+- ✅ Select & apply profiles to virtual desktops
 - ✅ PID & HWND persistence
 - ✅ Electron / UWP friendly
 - ✅ Tray icon support
