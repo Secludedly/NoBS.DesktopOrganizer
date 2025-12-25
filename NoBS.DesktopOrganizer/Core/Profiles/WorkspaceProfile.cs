@@ -28,6 +28,7 @@ namespace NoBS.Core.Profiles
         public string? VirtualDesktopId { get; set; } = null;
         public bool RenameVirtualDesktop { get; set; } = false;
         public bool CreatedFromSnapshot { get; set; } = false;
+        public int DisplayOrder { get; set; } = int.MaxValue; // For ordering profiles in UI
 
 
         // ============================

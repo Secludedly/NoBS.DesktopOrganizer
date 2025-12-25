@@ -16,7 +16,7 @@ namespace NoBS.DesktopOrganizer.UI
             Paint += (_, e) =>
             {
                 // Draw border
-                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                using (var pen = new Pen(Theme.BorderMidnight, 2))
                 {
                     e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
                 }
@@ -37,7 +37,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 10,
                 Font = Theme.SectionFont,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 AutoSize = true
             };
             Controls.Add(lblTitle);
@@ -111,7 +111,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Top = yPos,
                 Width = contentPanel.Width - 40,
                 Font = new Font("Consolas", 9f, FontStyle.Bold),
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 AutoSize = false,
                 Height = 20
             };

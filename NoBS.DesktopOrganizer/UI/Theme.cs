@@ -17,13 +17,13 @@ namespace NoBS.DesktopOrganizer.UI
         public static Color TextBright => Color.FromArgb(255, 255, 255);       // Bright white
 
         public static Color BorderDark => Color.FromArgb(40, 40, 40);          // Dark gray border
-        public static Color BorderCrimson => Color.FromArgb(15, 30, 70);       // Dark midnight blue border
-        public static Color BorderCrimsonBright => Color.FromArgb(30, 60, 120); // Brighter midnight blue
+        public static Color BorderMidnight => Color.FromArgb(15, 30, 70);       // Dark midnight blue border
+        public static Color BorderMidnightBright => Color.FromArgb(30, 60, 120); // Brighter midnight blue
 
-        public static Color Crimson => Color.FromArgb(20, 40, 90);             // Main midnight blue accent
-        public static Color CrimsonGlow => Color.FromArgb(40, 80, 160);        // Midnight blue glow
-        public static Color CrimsonDark => Color.FromArgb(10, 20, 50);         // Dark midnight blue shadow
-        public static Color CrimsonBright => Color.FromArgb(60, 120, 200);     // Bright midnight blue highlight
+        public static Color Midnight => Color.FromArgb(20, 40, 90);             // Main midnight blue accent
+        public static Color MidnightGlow => Color.FromArgb(40, 80, 160);        // Midnight blue glow
+        public static Color MidnightDark => Color.FromArgb(10, 20, 50);         // Dark midnight blue shadow
+        public static Color MidnightBright => Color.FromArgb(60, 120, 200);     // Bright midnight blue highlight
 
         public static Color Shadow => Color.FromArgb(50, 50, 50);              // Gray shadow
         public static Color ShadowDark => Color.FromArgb(25, 25, 25);          // Dark shadow

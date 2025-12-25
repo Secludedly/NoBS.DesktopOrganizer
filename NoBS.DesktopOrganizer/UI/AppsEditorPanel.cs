@@ -18,6 +18,8 @@ namespace NoBS.DesktopOrganizer.UI
         private ListBox lstApps;
         private Button btnAdd;
         private Button btnRemove;
+        private Button btnMoveUp;
+        private Button btnMoveDown;
         private NumericUpDown numDelay;
         private CheckBox chkKill;
 
@@ -34,7 +36,7 @@ namespace NoBS.DesktopOrganizer.UI
             Paint += (_, e) =>
             {
                 // Draw crimson border
-                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                using (var pen = new Pen(Theme.BorderMidnight, 2))
                 {
                     e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
                 }
@@ -66,7 +68,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 10,
                 Font = Theme.SectionFont,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 AutoSize = true
             };
             Controls.Add(lblTitle);
@@ -144,6 +146,30 @@ namespace NoBS.DesktopOrganizer.UI
             btnRemove.ForeColor = Theme.Danger;
             btnRemove.Click += RemoveApp;
             Controls.Add(btnRemove);
+
+            btnMoveUp = new AnimatedButton
+            {
+                Text = "↑ UP",
+                Left = 370,
+                Top = 40,
+                Width = 90,
+                Height = 32,
+                Enabled = false
+            };
+            btnMoveUp.Click += MoveAppUp;
+            Controls.Add(btnMoveUp);
+
+            btnMoveDown = new AnimatedButton
+            {
+                Text = "↓ DOWN",
+                Left = 370,
+                Top = 78,
+                Width = 90,
+                Height = 32,
+                Enabled = false
+            };
+            btnMoveDown.Click += MoveAppDown;
+            Controls.Add(btnMoveDown);
 
             var lblDelay = new Label
             {
@@ -237,6 +263,14 @@ namespace NoBS.DesktopOrganizer.UI
             numDelay.Enabled = true;
             chkKill.Enabled = true;
 
+            // Enable/disable move buttons based on position
+            if (profile != null)
+            {
+                int index = profile.Apps.IndexOf(app);
+                btnMoveUp.Enabled = index > 0;
+                btnMoveDown.Enabled = index < profile.Apps.Count - 1;
+            }
+
             numDelay.Value = Math.Clamp(app.LaunchDelaySeconds, (int)numDelay.Minimum, (int)numDelay.Maximum);
             chkKill.Checked = app.KillOnSwitch;
 
@@ -253,6 +287,9 @@ namespace NoBS.DesktopOrganizer.UI
 
             chkKill.Checked = false;
             chkKill.Enabled = false;
+
+            btnMoveUp.Enabled = false;
+            btnMoveDown.Enabled = false;
 
             suppressEvents = false;
         }
@@ -479,6 +516,28 @@ namespace NoBS.DesktopOrganizer.UI
             };
             menu.Items.Add(reopenFreshItem);
 
+            menu.Items.Add(new ToolStripSeparator());
+
+            // Move Up
+            var moveUpItem = new ToolStripMenuItem("Move Up");
+            if (profile != null)
+            {
+                int index = profile.Apps.IndexOf(app);
+                moveUpItem.Enabled = index > 0;
+            }
+            moveUpItem.Click += (s, e) => MoveAppUp(null, EventArgs.Empty);
+            menu.Items.Add(moveUpItem);
+
+            // Move Down
+            var moveDownItem = new ToolStripMenuItem("Move Down");
+            if (profile != null)
+            {
+                int index = profile.Apps.IndexOf(app);
+                moveDownItem.Enabled = index < profile.Apps.Count - 1;
+            }
+            moveDownItem.Click += (s, e) => MoveAppDown(null, EventArgs.Empty);
+            menu.Items.Add(moveDownItem);
+
             return menu;
         }
 
@@ -544,6 +603,38 @@ namespace NoBS.DesktopOrganizer.UI
             ClearSelection();
         }
 
+        private void MoveAppUp(object? sender, EventArgs e)
+        {
+            if (profile == null || lstApps.SelectedItem is not WindowPosition app) return;
+
+            int currentIndex = profile.Apps.IndexOf(app);
+            if (currentIndex <= 0) return; // Already at top
+
+            // Swap with previous item
+            profile.Apps.RemoveAt(currentIndex);
+            profile.Apps.Insert(currentIndex - 1, app);
+            profile.MarkDirty();
+
+            RefreshList();
+            lstApps.SelectedItem = app; // Maintain selection
+        }
+
+        private void MoveAppDown(object? sender, EventArgs e)
+        {
+            if (profile == null || lstApps.SelectedItem is not WindowPosition app) return;
+
+            int currentIndex = profile.Apps.IndexOf(app);
+            if (currentIndex >= profile.Apps.Count - 1) return; // Already at bottom
+
+            // Swap with next item
+            profile.Apps.RemoveAt(currentIndex);
+            profile.Apps.Insert(currentIndex + 1, app);
+            profile.MarkDirty();
+
+            RefreshList();
+            lstApps.SelectedItem = app; // Maintain selection
+        }
+
         // =========================
         // OWNER DRAW + STATUS REFRESH
         // =========================
@@ -586,7 +677,7 @@ namespace NoBS.DesktopOrganizer.UI
 
             // Background
             Color bgColor = (e.State & DrawItemState.Selected) != 0
-                ? Theme.CrimsonDark
+                ? Theme.MidnightDark
                 : Theme.Background;
             using (var bgBrush = new SolidBrush(bgColor))
             {

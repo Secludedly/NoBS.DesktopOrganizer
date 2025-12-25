@@ -14,6 +14,7 @@ namespace NoBS.DesktopOrganizer.UI
         private bool isShaking = false;
         private int originalX;
         private Color currentGlowColor;
+        private string? storedText;
 
         public AnimatedButton()
         {
@@ -24,7 +25,7 @@ namespace NoBS.DesktopOrganizer.UI
             Cursor = Cursors.Hand;
 
             FlatAppearance.BorderSize = 2;
-            FlatAppearance.BorderColor = Theme.BorderCrimson;
+            FlatAppearance.BorderColor = Theme.BorderMidnight;
             FlatAppearance.MouseOverBackColor = Theme.Panel;
             FlatAppearance.MouseDownBackColor = Theme.DarkPanel;
 
@@ -42,6 +43,31 @@ namespace NoBS.DesktopOrganizer.UI
 
             // Custom paint for glow effect
             Paint += AnimatedButton_Paint;
+
+            // Handle enabled state changes
+            EnabledChanged += AnimatedButton_EnabledChanged;
+        }
+
+        private void AnimatedButton_EnabledChanged(object sender, EventArgs e)
+        {
+            if (Enabled)
+            {
+                // Enabled: restore text and styling
+                if (storedText != null)
+                {
+                    Text = storedText;
+                    storedText = null;
+                }
+                ForeColor = Color.White;
+                Cursor = Cursors.Hand;
+            }
+            else
+            {
+                // Disabled: hide text by clearing it
+                storedText = Text;
+                Text = string.Empty;
+                Cursor = Cursors.Default;
+            }
         }
 
         private void GlowTimer_Tick(object sender, EventArgs e)
@@ -51,9 +77,9 @@ namespace NoBS.DesktopOrganizer.UI
             // Calculate glow intensity (sin wave for smooth fade)
             double intensity = (Math.Sin(glowPhase * Math.PI / 50.0) + 1.0) / 2.0;
 
-            int r = (int)(Theme.BorderCrimson.R + (Theme.CrimsonGlow.R - Theme.BorderCrimson.R) * intensity);
-            int g = (int)(Theme.BorderCrimson.G + (Theme.CrimsonGlow.G - Theme.BorderCrimson.G) * intensity);
-            int b = (int)(Theme.BorderCrimson.B + (Theme.CrimsonGlow.B - Theme.BorderCrimson.B) * intensity);
+            int r = (int)(Theme.BorderMidnight.R + (Theme.BorderMidnight.R - Theme.BorderMidnight.R) * intensity);
+            int g = (int)(Theme.BorderMidnight.G + (Theme.MidnightGlow.G - Theme.BorderMidnight.G) * intensity);
+            int b = (int)(Theme.BorderMidnight.B + (Theme.MidnightGlow.B - Theme.BorderMidnight.B) * intensity);
 
             currentGlowColor = Color.FromArgb(r, g, b);
             FlatAppearance.BorderColor = currentGlowColor;
@@ -66,7 +92,7 @@ namespace NoBS.DesktopOrganizer.UI
             originalX = Left;
             isShaking = true;
             shakeTimer.Start();
-            FlatAppearance.BorderColor = Theme.CrimsonBright;
+            FlatAppearance.BorderColor = Theme.MidnightBright;
         }
 
         private void AnimatedButton_MouseLeave(object sender, EventArgs e)

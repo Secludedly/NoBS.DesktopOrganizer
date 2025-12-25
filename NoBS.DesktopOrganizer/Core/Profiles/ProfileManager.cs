@@ -36,7 +36,8 @@ namespace NoBS.Core.Profiles
                 }
             }
 
-            return profiles;
+            // Sort by DisplayOrder, then by Name
+            return profiles.OrderBy(p => p.DisplayOrder).ThenBy(p => p.Name).ToList();
         }
 
         public static void SaveProfile(WorkspaceProfile profile)
@@ -70,6 +71,15 @@ namespace NoBS.Core.Profiles
             var filePath = Path.Combine(ProfilesFolder, $"{profileName}.json");
             if (File.Exists(filePath))
                 File.Delete(filePath);
+        }
+
+        public static void ReorderProfiles(List<WorkspaceProfile> orderedProfiles)
+        {
+            for (int i = 0; i < orderedProfiles.Count; i++)
+            {
+                orderedProfiles[i].DisplayOrder = i;
+                SaveProfile(orderedProfiles[i]);
+            }
         }
     }
 }

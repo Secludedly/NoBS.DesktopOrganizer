@@ -19,6 +19,12 @@
     <Compile Update="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="UI\SaveDetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="UI\SettingsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="UI\SuggestionsPanel.cs">
       <SubType>Component</SubType>
     </Compile>

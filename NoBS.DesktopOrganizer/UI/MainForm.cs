@@ -2,12 +2,14 @@
 using Microsoft.VisualBasic;
 using NoBS.DesktopOrganizer.Core;
 using NoBS.DesktopOrganizer.Core.Helpers;
+using NoBS.DesktopOrganizer.Core.Settings;
 using NoBS.DesktopOrganizer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NoBS.DesktopOrganizer.UI
@@ -18,6 +20,8 @@ namespace NoBS.DesktopOrganizer.UI
         private AnimatedButton btnCreateProfile;
         private AnimatedButton btnRename;
         private AnimatedButton btnDelete;
+        private AnimatedButton btnMoveProfileUp;
+        private AnimatedButton btnMoveProfileDown;
 
         private AnimatedButton btnSave;
         private AnimatedButton btnApply;
@@ -30,10 +34,13 @@ namespace NoBS.DesktopOrganizer.UI
         private AppsEditorPanel appsEditor;
         private WallpaperEditorPanel wallpaperEditor;
         private SuggestionsPanel suggestionsPanel;
+        private SettingsPanel settingsPanel;
         private Label lblProfileTitle;
         private Label lblAppsOverlay;
         private Label lblStatusBar;
         private AnimatedButton btnToggleSuggestions;
+        private AnimatedButton btnMinimizeToTray;
+        private AnimatedButton btnSettings;
 
         private readonly AppRunner appRunner = new();
         private readonly ProfileApplier profileApplier;
@@ -59,6 +66,9 @@ namespace NoBS.DesktopOrganizer.UI
             if (Theme.Background == null)
                 throw new InvalidOperationException("Theme must be initialized before MainForm");
 
+            // Load settings early
+            SettingsManager.Load();
+
             Logger.ClearLog();
             Logger.LogInfo("=== NoBS Desktop Organizer Started ===");
 
@@ -71,8 +81,53 @@ namespace NoBS.DesktopOrganizer.UI
             profileApplier = new ProfileApplier(appRunner);
 
             InitializeComponent();
+
+            // Apply settings to UI
+            ApplySettingsToUI();
+
+            // Handle startup minimized behavior
+            var settings = SettingsManager.CurrentSettings;
+            if (settings.StartMinimizedToTray)
+            {
+                WindowState = FormWindowState.Minimized;
+                Hide();
+                trayIcon.Visible = true;
+            }
+            else if (settings.StartMinimizedToTaskbar)
+            {
+                WindowState = FormWindowState.Minimized;
+            }
+
             LoadProfiles();
             LoadCustomIcon();
+
+            // Handle startup profile after a brief delay
+            if (!string.IsNullOrEmpty(settings.StartupProfileName))
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(1000); // Wait for UI to fully load
+                    var profile = ProfileManager.LoadAllProfiles()
+                        .FirstOrDefault(p => p.Name == settings.StartupProfileName);
+                    if (profile != null)
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            currentProfile = profile;
+                            lstProfiles.SelectedItem = profile;
+                        }));
+                        await Task.Delay(500);
+                        await profileApplier.ApplyProfileAsync(profile);
+                        Invoke(new Action(() =>
+                        {
+                            isProfileApplied = true;
+                            lblOnlineStatus.Text = "● ONLINE";
+                            lblOnlineStatus.ForeColor = Theme.StatusOnline;
+                            lblOnlineStatus.Visible = true;
+                        }));
+                    }
+                });
+            }
         }
 
         private void LoadCustomIcon()
@@ -141,7 +196,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 12,
                 Font = Theme.SectionFont,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 AutoSize = true
             };
             Controls.Add(lblProfilesTitle);
@@ -151,7 +206,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 40,
                 Width = 200,
-                Height = ClientSize.Height - 210,
+                Height = ClientSize.Height - 250,  // Reduced by 40 to make room for Up/Down buttons
                 BackColor = Color.FromArgb(15, 15, 15),
                 ForeColor = Theme.Text,
                 BorderStyle = BorderStyle.None,
@@ -174,7 +229,7 @@ namespace NoBS.DesktopOrganizer.UI
             };
             profilesContainer.Paint += (s, e) =>
             {
-                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                using (var pen = new Pen(Theme.BorderMidnight, 2))
                 {
                     e.Graphics.DrawRectangle(pen, 0, 0, profilesContainer.Width - 1, profilesContainer.Height - 1);
                 }
@@ -183,6 +238,60 @@ namespace NoBS.DesktopOrganizer.UI
             profilesContainer.Controls.Add(lstProfiles);
             lstProfiles.Left = 2;
             lstProfiles.Top = 2;
+
+            // ============================
+            // Profile reordering buttons
+            // ============================
+            var profileButtonsPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 36,
+                BackColor = Color.Transparent,
+                ColumnCount = 2,
+                RowCount = 1
+            };
+
+            // Each button gets 50% width
+            profileButtonsPanel.ColumnStyles.Add(
+                new ColumnStyle(SizeType.Percent, 50f));
+            profileButtonsPanel.ColumnStyles.Add(
+                new ColumnStyle(SizeType.Percent, 50f));
+
+            profileButtonsPanel.RowStyles.Add(
+                new RowStyle(SizeType.Percent, 100f));
+
+            profilesContainer.Controls.Add(profileButtonsPanel);
+
+            // ---- UP BUTTON ----
+            btnMoveProfileUp = new AnimatedButton
+            {
+                Text = "↑ UP",
+                Anchor = AnchorStyles.None,  // Center in cell
+                Width = 95,
+                Height = 32,
+                Enabled = false
+            };
+            btnMoveProfileUp.Click += MoveProfileUp;
+
+            // ---- DOWN BUTTON ----
+            btnMoveProfileDown = new AnimatedButton
+            {
+                Text = "↓ DOWN",
+                Anchor = AnchorStyles.None,  // Center in cell
+                Width = 95,
+                Height = 32,
+                Enabled = false
+            };
+            btnMoveProfileDown.Click += MoveProfileDown;
+
+            // Add buttons side-by-side
+            profileButtonsPanel.Controls.Add(btnMoveProfileUp, 0, 0);
+            profileButtonsPanel.Controls.Add(btnMoveProfileDown, 1, 0);
+
+            // Resize ListBox so it doesn't overlap the buttons
+            lstProfiles.Height = profilesContainer.Height
+                - profileButtonsPanel.Height
+                - 4;
 
             // ============================
             // PROFILE BUTTONS
@@ -249,7 +358,7 @@ namespace NoBS.DesktopOrganizer.UI
             });
             Controls.Add(linkGitHub);
 
-            // Donation links - First row centered
+            // Donation links
             var linkKoFi = new LinkLabel
             {
                 Text = "Ko-Fi",
@@ -297,7 +406,7 @@ namespace NoBS.DesktopOrganizer.UI
             });
             Controls.Add(linkPayPal);
 
-            // Second row centered
+            // Second row
             var linkVenmo = new LinkLabel
             {
                 Text = "Venmo",
@@ -361,7 +470,7 @@ namespace NoBS.DesktopOrganizer.UI
             {
                 // Draw crimson border with shadow
                 using (var shadowPen = new Pen(Theme.ShadowDark, 3))
-                using (var borderPen = new Pen(Theme.BorderCrimson, 2))
+                using (var borderPen = new Pen(Theme.BorderMidnight, 2))
                 {
                     e.Graphics.DrawRectangle(shadowPen, 2, 2, rightPanel.Width - 3, rightPanel.Height - 3);
                     e.Graphics.DrawRectangle(borderPen, 0, 0, rightPanel.Width - 1, rightPanel.Height - 1);
@@ -403,6 +512,14 @@ namespace NoBS.DesktopOrganizer.UI
                         ? Color.FromArgb(20, 90, 20)
                         : Theme.StatusOnline;
                 }
+
+                // Refresh profile list icons to show live status updates
+                var allProfiles = lstProfiles.Items.Cast<WorkspaceProfile>().ToList();
+                foreach (var profile in allProfiles)
+                {
+                    appRunner.RefreshAppStatuses(profile.Apps);
+                }
+                lstProfiles.Invalidate(); // Force redraw with updated statuses
             };
             statusBlinkTimer.Start();
 
@@ -435,17 +552,61 @@ namespace NoBS.DesktopOrganizer.UI
             };
             rightPanel.Controls.Add(suggestionsPanel);
 
-            // Toggle button for suggestions
+            // Settings panel
+            settingsPanel = new SettingsPanel
+            {
+                Left = 20,
+                Top = 60,
+                Width = rightPanel.Width - 40,
+                Height = rightPanel.Height - 80,
+                Visible = false
+            };
+            settingsPanel.SettingsClosed += (s, e) => ToggleSettings(null, EventArgs.Empty);
+            rightPanel.Controls.Add(settingsPanel);
+
+            // Minimize to Tray button
+            btnMinimizeToTray = new AnimatedButton
+            {
+                Text = "MINIMIZE TO TRAY",
+                Left = rightPanel.Width - 200,
+                Top = 13,
+                Width = 180,
+                Height = 34
+            };
+            btnMinimizeToTray.Click += (s, e) =>
+            {
+                Hide();
+                trayIcon.Visible = true;
+                trayIcon.ShowBalloonTip(2000, "NoBS", "Minimized to tray. Double-click to restore.", ToolTipIcon.Info);
+            };
+            rightPanel.Controls.Add(btnMinimizeToTray);
+            btnMinimizeToTray.BringToFront();
+
+            // Settings button
+            btnSettings = new AnimatedButton
+            {
+                Text = "SETTINGS",
+                Left = rightPanel.Width - 390,
+                Top = 13,
+                Width = 180,
+                Height = 34
+            };
+            btnSettings.Click += ToggleSettings;
+            rightPanel.Controls.Add(btnSettings);
+            btnSettings.BringToFront();
+
+            // Suggestions button (bottom right corner of form)
             btnToggleSuggestions = new AnimatedButton
             {
                 Text = "SUGGESTIONS",
-                Left = rightPanel.Width - 170,
-                Top = 13,
                 Width = 150,
-                Height = 34
+                Height = 35,
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right
             };
+            btnToggleSuggestions.Left = ClientSize.Width - btnToggleSuggestions.Width - 15;
+            btnToggleSuggestions.Top = ClientSize.Height - btnToggleSuggestions.Height - 15;
             btnToggleSuggestions.Click += ToggleSuggestions;
-            rightPanel.Controls.Add(btnToggleSuggestions);
+            Controls.Add(btnToggleSuggestions);
             btnToggleSuggestions.BringToFront();
 
             lblAppsOverlay = new Label
@@ -472,7 +633,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 20,
                 Top = wallpaperEditor.Bottom + 15,
                 AutoSize = true,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 Font = Theme.SectionFont
             };
             rightPanel.Controls.Add(lblVolume);
@@ -544,7 +705,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 20,
                 Top = volumeSlider.Bottom + 15,
                 AutoSize = true,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 Font = Theme.SectionFont,
                 Visible = true
             };
@@ -722,13 +883,9 @@ namespace NoBS.DesktopOrganizer.UI
                 ProfileManager.SaveProfile(currentProfile);
                 currentProfile.ClearDirty();
 
-                string message = $"Profile saved.\n\nWindow positions saved: {savedCount}";
-                if (notRunningCount > 0)
-                {
-                    message += $"\nApps not running (positions unchanged): {notRunningCount}";
-                }
-
-                MessageBox.Show(this, message, "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Show enhanced save details dialog
+                using var dialog = new SaveDetailsDialog(currentProfile, savedCount, notRunningCount);
+                dialog.ShowDialog(this);
             };
 
             btnApply.Click += async (_, __) =>
@@ -813,6 +970,10 @@ namespace NoBS.DesktopOrganizer.UI
                     lblOnlineStatus.Visible = true;
 
                     UpdateStatusBar($"Profile '{currentProfile.Name}' applied successfully!");
+
+                    // Handle minimize behavior after applying profile
+                    await HandleMinimizeAfterApply();
+
                     await Task.Delay(3000);
                     UpdateStatusBar("Ready");
                 }
@@ -909,6 +1070,8 @@ namespace NoBS.DesktopOrganizer.UI
             // -------------------------------
             btnRename.Enabled = true;
             btnDelete.Enabled = true;
+            btnMoveProfileUp.Enabled = lstProfiles.SelectedIndex > 0;
+            btnMoveProfileDown.Enabled = lstProfiles.SelectedIndex < lstProfiles.Items.Count - 1;
             btnApply.Enabled = currentProfile.Apps.Any();
             btnKill.Enabled = currentProfile.Apps.Any();
 
@@ -1001,6 +1164,8 @@ namespace NoBS.DesktopOrganizer.UI
             btnKill.Enabled = false;
             btnRename.Enabled = false;
             btnDelete.Enabled = false;
+            btnMoveProfileUp.Enabled = false;
+            btnMoveProfileDown.Enabled = false;
             UpdateStatusBar("▌NO PROFILE SELECTED | Save: Ctrl+S | Apply: Ctrl+Enter | Refresh: F5");
         }
 
@@ -1032,6 +1197,7 @@ namespace NoBS.DesktopOrganizer.UI
                 lblProfileTitle.Visible = true;
                 lblOnlineStatus.Visible = currentProfile != null;
                 btnToggleSuggestions.Text = "SUGGESTIONS";
+                btnSettings.Visible = true;  // Show Settings button
 
                 // Restore online/offline status based on applied state
                 if (currentProfile != null)
@@ -1063,7 +1229,83 @@ namespace NoBS.DesktopOrganizer.UI
                 lblProfileTitle.Visible = false;
                 lblOnlineStatus.Visible = false;
                 btnToggleSuggestions.Text = "BACK";
+                btnSettings.Visible = false;  // Hide Settings button
             }
+        }
+
+        private void ToggleSettings(object? sender, EventArgs e)
+        {
+            if (settingsPanel.Visible)
+            {
+                // Hide settings, show main UI
+                settingsPanel.Visible = false;
+                appsEditor.Visible = true;
+                wallpaperEditor.Visible = true;
+                lblVolume.Visible = !SettingsManager.CurrentSettings.DisableSystemVolumeModifications;
+                volumeSlider.Visible = !SettingsManager.CurrentSettings.DisableSystemVolumeModifications;
+                volumeBox.Visible = !SettingsManager.CurrentSettings.DisableSystemVolumeModifications;
+                lblVirtualDesktop.Visible = !SettingsManager.CurrentSettings.DisableVirtualDesktopSupport;
+                cboVirtualDesktop.Visible = !SettingsManager.CurrentSettings.DisableVirtualDesktopSupport;
+                chkRenameDesktop.Visible = !SettingsManager.CurrentSettings.DisableVirtualDesktopSupport;
+                lblProfileTitle.Visible = true;
+                lblOnlineStatus.Visible = currentProfile != null;
+                btnSettings.Text = "SETTINGS";
+                btnToggleSuggestions.Visible = true;  // Show Suggestions button
+
+                // Re-apply settings that might have changed
+                ApplySettingsToUI();
+
+                // Restore online/offline status
+                if (currentProfile != null)
+                {
+                    if (isProfileApplied)
+                    {
+                        lblOnlineStatus.Text = "● ONLINE";
+                        lblOnlineStatus.ForeColor = Theme.StatusOnline;
+                    }
+                    else
+                    {
+                        lblOnlineStatus.Text = "● OFFLINE";
+                        lblOnlineStatus.ForeColor = Color.FromArgb(180, 30, 30);
+                    }
+                }
+            }
+            else
+            {
+                // Show settings, hide main UI
+                settingsPanel.LoadSettings();
+                settingsPanel.Visible = true;
+                appsEditor.Visible = false;
+                wallpaperEditor.Visible = false;
+                lblVolume.Visible = false;
+                volumeSlider.Visible = false;
+                volumeBox.Visible = false;
+                lblVirtualDesktop.Visible = false;
+                cboVirtualDesktop.Visible = false;
+                chkRenameDesktop.Visible = false;
+                lblProfileTitle.Visible = false;
+                lblOnlineStatus.Visible = false;
+                btnSettings.Text = "BACK";
+                btnToggleSuggestions.Visible = false;  // Hide Suggestions button
+            }
+        }
+
+        private void ApplySettingsToUI()
+        {
+            var settings = SettingsManager.CurrentSettings;
+
+            // Hide/show volume controls
+            lblVolume.Visible = !settings.DisableSystemVolumeModifications;
+            volumeSlider.Visible = !settings.DisableSystemVolumeModifications;
+            volumeBox.Visible = !settings.DisableSystemVolumeModifications;
+
+            // Hide/show wallpaper editor
+            wallpaperEditor.Visible = !settings.DisableWallpaperModifications;
+
+            // Hide/show virtual desktop controls
+            lblVirtualDesktop.Visible = !settings.DisableVirtualDesktopSupport;
+            cboVirtualDesktop.Visible = !settings.DisableVirtualDesktopSupport;
+            chkRenameDesktop.Visible = !settings.DisableVirtualDesktopSupport;
         }
 
         private void RefreshVirtualDesktopsList()
@@ -1151,12 +1393,8 @@ namespace NoBS.DesktopOrganizer.UI
 
         private void MainForm_Resize(object? sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Minimized)
-            {
-                Hide();
-                trayIcon.Visible = true;
-                trayIcon.ShowBalloonTip(2000, "NoBS Desktop Organizer", "Minimized to tray. Double-click to restore.", ToolTipIcon.Info);
-            }
+            // Titlebar minimize now just minimizes to taskbar (no auto-tray)
+            // Use the "MINIMIZE TO TRAY" button for tray minimization
         }
 
         private void TrayIcon_DoubleClick(object? sender, EventArgs e)
@@ -1409,6 +1647,20 @@ namespace NoBS.DesktopOrganizer.UI
             };
             menu.Items.Add(renameItem);
 
+            // Move Up
+            var moveUpItem = new ToolStripMenuItem("Move Up");
+            moveUpItem.Enabled = lstProfiles.SelectedIndex > 0;
+            moveUpItem.Click += (s, e) => MoveProfileUp(null, EventArgs.Empty);
+            menu.Items.Add(moveUpItem);
+
+            // Move Down
+            var moveDownItem = new ToolStripMenuItem("Move Down");
+            moveDownItem.Enabled = lstProfiles.SelectedIndex < lstProfiles.Items.Count - 1;
+            moveDownItem.Click += (s, e) => MoveProfileDown(null, EventArgs.Empty);
+            menu.Items.Add(moveDownItem);
+
+            menu.Items.Add(new ToolStripSeparator());
+
             // Kill All Apps
             var killAllItem = new ToolStripMenuItem("Kill All Apps");
             killAllItem.Click += (s, e) =>
@@ -1465,7 +1717,7 @@ namespace NoBS.DesktopOrganizer.UI
 
             // Background
             Color bgColor = (e.State & DrawItemState.Selected) != 0
-                ? Theme.CrimsonDark
+                ? Theme.MidnightDark
                 : Theme.DarkPanel;
             using (var bgBrush = new SolidBrush(bgColor))
             {
@@ -1473,7 +1725,7 @@ namespace NoBS.DesktopOrganizer.UI
             }
 
             // Left crimson accent bar
-            using (var accentBrush = new SolidBrush(Theme.CrimsonBright))
+            using (var accentBrush = new SolidBrush(Theme.MidnightBright))
             {
                 e.Graphics.FillRectangle(accentBrush, e.Bounds.X, e.Bounds.Y, 3, e.Bounds.Height);
             }
@@ -1596,6 +1848,129 @@ namespace NoBS.DesktopOrganizer.UI
             lstProfiles.SelectedItem = lstProfiles.Items
                 .OfType<WorkspaceProfile>()
                 .FirstOrDefault(p => p.Name == newName);
+        }
+
+        private void MoveProfileUp(object? sender, EventArgs e)
+        {
+            if (lstProfiles.SelectedItem is not WorkspaceProfile selectedProfile)
+                return;
+
+            var profiles = lstProfiles.Items.Cast<WorkspaceProfile>().ToList();
+            int index = profiles.IndexOf(selectedProfile);
+
+            if (index <= 0) return;
+
+            profiles.RemoveAt(index);
+            profiles.Insert(index - 1, selectedProfile);
+
+            ProfileManager.ReorderProfiles(profiles);
+
+            // Save the profile name to reselect after reload
+            string selectedProfileName = selectedProfile.Name;
+
+            LoadProfiles();
+
+            // Reselect by name (since LoadProfiles creates new objects)
+            lstProfiles.SelectedItem = lstProfiles.Items
+                .Cast<WorkspaceProfile>()
+                .FirstOrDefault(p => p.Name == selectedProfileName);
+        }
+
+        private void MoveProfileDown(object? sender, EventArgs e)
+        {
+            if (lstProfiles.SelectedItem is not WorkspaceProfile selectedProfile)
+                return;
+
+            var profiles = lstProfiles.Items.Cast<WorkspaceProfile>().ToList();
+            int index = profiles.IndexOf(selectedProfile);
+
+            if (index < 0 || index >= profiles.Count - 1) return;
+
+            profiles.RemoveAt(index);
+            profiles.Insert(index + 1, selectedProfile);
+
+            ProfileManager.ReorderProfiles(profiles);
+
+            // Save the profile name to reselect after reload
+            string selectedProfileName = selectedProfile.Name;
+
+            LoadProfiles();
+
+            // Reselect by name (since LoadProfiles creates new objects)
+            lstProfiles.SelectedItem = lstProfiles.Items
+                .Cast<WorkspaceProfile>()
+                .FirstOrDefault(p => p.Name == selectedProfileName);
+        }
+
+        private async Task HandleMinimizeAfterApply()
+        {
+            var settings = SettingsManager.CurrentSettings;
+
+            // If set to "Ask Every Time" or first time, show dialog
+            if (settings.MinimizeAfterApply == MinimizeAfterApplyBehavior.AskEveryTime ||
+                !settings.HasShownMinimizePreferenceDialog)
+            {
+                var result = MessageBox.Show(
+                    this,
+                    "Would you like to minimize NoBS after applying profiles?\n\n" +
+                    "Yes = Minimize to Tray (hidden)\n" +
+                    "No = Minimize to Taskbar\n" +
+                    "Cancel = Stay open\n\n" +
+                    "You can change this in Settings later.",
+                    "Minimize Preference",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question
+                );
+
+                // Save preference if this is the first time
+                if (!settings.HasShownMinimizePreferenceDialog)
+                {
+                    settings.HasShownMinimizePreferenceDialog = true;
+
+                    if (result == DialogResult.Yes)
+                        settings.MinimizeAfterApply = MinimizeAfterApplyBehavior.MinimizeToTray;
+                    else if (result == DialogResult.No)
+                        settings.MinimizeAfterApply = MinimizeAfterApplyBehavior.MinimizeToTaskbar;
+                    else
+                        settings.MinimizeAfterApply = MinimizeAfterApplyBehavior.DoNotMinimize;
+
+                    SettingsManager.Save();
+                }
+
+                // Apply the choice
+                await Task.Delay(500); // Brief delay before minimizing
+
+                if (result == DialogResult.Yes)
+                {
+                    Hide();
+                    trayIcon.Visible = true;
+                    trayIcon.ShowBalloonTip(2000, "NoBS", "Minimized to tray", ToolTipIcon.Info);
+                }
+                else if (result == DialogResult.No)
+                {
+                    WindowState = FormWindowState.Minimized;
+                }
+            }
+            else
+            {
+                // Apply saved preference
+                await Task.Delay(500);
+
+                switch (settings.MinimizeAfterApply)
+                {
+                    case MinimizeAfterApplyBehavior.MinimizeToTray:
+                        Hide();
+                        trayIcon.Visible = true;
+                        trayIcon.ShowBalloonTip(2000, "NoBS", "Minimized to tray", ToolTipIcon.Info);
+                        break;
+                    case MinimizeAfterApplyBehavior.MinimizeToTaskbar:
+                        WindowState = FormWindowState.Minimized;
+                        break;
+                    case MinimizeAfterApplyBehavior.DoNotMinimize:
+                        // Do nothing
+                        break;
+                }
+            }
         }
     }
 }

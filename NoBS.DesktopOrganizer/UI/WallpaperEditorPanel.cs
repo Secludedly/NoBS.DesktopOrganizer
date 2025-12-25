@@ -28,7 +28,7 @@ namespace NoBS.DesktopOrganizer.UI
             Paint += (_, e) =>
             {
                 // Draw crimson border
-                using (var pen = new Pen(Theme.BorderCrimson, 2))
+                using (var pen = new Pen(Theme.BorderMidnight, 2))
                 {
                     e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
                 }
@@ -51,7 +51,7 @@ namespace NoBS.DesktopOrganizer.UI
                 Left = 15,
                 Top = 10,
                 Font = Theme.SectionFont,
-                ForeColor = Theme.CrimsonBright,
+                ForeColor = Theme.MidnightBright,
                 AutoSize = true
             };
             Controls.Add(lblTitle);
@@ -100,7 +100,7 @@ namespace NoBS.DesktopOrganizer.UI
             picThumbnail = new PictureBox
             {
                 Left = 230,
-                Top = 40,
+                Top = 23,
                 Width = 240,
                 Height = 135,
                 BorderStyle = BorderStyle.None,
@@ -121,7 +121,7 @@ namespace NoBS.DesktopOrganizer.UI
             {
                 Text = "NO WALLPAPER",
                 Left = 230,
-                Top = 40,
+                Top = 23,
                 Width = 240,
                 Height = 135,
                 TextAlign = ContentAlignment.MiddleCenter,
